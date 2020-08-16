@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * @author : yangqi
@@ -42,10 +43,7 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
 
         String key = this.getKey(tableName, eventData.getAfterValue().getRowKey());
         Object o = redisService.get(key);
-        if (o != null) {
-            return JSON.parseObject(o.toString(), EventData.class);
-        }
-        return null;
+        return Optional.ofNullable(o).map(item -> JSON.parseObject(item.toString(), EventData.class)).orElse(null);
     }
 
     public String getKey(String tableName, String rowKey) {
