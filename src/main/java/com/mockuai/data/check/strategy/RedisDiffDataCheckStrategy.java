@@ -33,7 +33,7 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
 
         String tableName = eventData.getTableName();
         String key = this.getKey(tableName, eventData.getAfterValue().getRowKey());
-        redisService.set(key, eventData, Constants.ONE_HOUR);
+        redisService.set(key, JSON.toJSONString(eventData), Constants.ONE_HOUR);
         super.comparison(eventData);
     }
 
