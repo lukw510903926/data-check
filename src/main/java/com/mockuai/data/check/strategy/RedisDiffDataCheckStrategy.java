@@ -25,6 +25,8 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
     @Resource
     private RedisService redisService;
 
+    private static final String DIFF_KEY = "diff_key";
+
     @Override
     public String getName() {
         return DataCheckType.DIFF_CHECK.name();
@@ -50,6 +52,6 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
     public String getKey(String tableName, Map<String, String> rowKeyMap) {
         StringBuilder builder = new StringBuilder();
         rowKeyMap.forEach((key, value) -> builder.append(value).append(Constants.SEPARATOR));
-        return Constants.ROW_KEY_PREFIX + tableName + Constants.SEPARATOR + builder.toString();
+        return Constants.ROW_KEY_PREFIX + DIFF_KEY + tableName + Constants.SEPARATOR + builder.toString();
     }
 }
