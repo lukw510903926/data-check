@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -33,7 +34,7 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
     public void comparison(EventData eventData) {
 
         String tableName = eventData.getTableName();
-        String key = this.getKey(tableName, eventData.getAfterValue().getRowKey());
+        String key = this.getKey(tableName, eventData.getAfterValue().getRowKeyMap());
         redisService.set(key, JSON.toJSONString(eventData), Constants.ONE_HOUR);
         super.comparison(eventData);
     }
@@ -41,12 +42,14 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
     @Override
     public EventData getRowValue(EventData eventData, String tableName) {
 
-        String key = this.getKey(tableName, eventData.getAfterValue().getRowKey());
+        String key = this.getKey(tableName, eventData.getAfterValue().getRowKeyMap());
         Object o = redisService.get(key);
         return Optional.ofNullable(o).map(item -> JSON.parseObject(item.toString(), EventData.class)).orElse(null);
     }
 
-    public String getKey(String tableName, String rowKey) {
-        return Constants.ROW_KEY_PREFIX + tableName + Constants.SEPARATOR + rowKey;
+    public String getKey(String tableName, Map<String, String> rowKeyMap) {
+        StringBuilder builder = new StringBuilder();
+        rowKeyMap.forEach((key, value) -> builder.append(value).append(Constants.SEPARATOR));
+        return Constants.ROW_KEY_PREFIX + tableName + Constants.SEPARATOR + builder.toString();
     }
 }

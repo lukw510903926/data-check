@@ -1,13 +1,13 @@
 package com.mockuai.data.check.dto;
 
 import com.google.common.collect.Maps;
-import com.mockuai.data.check.constants.Constants;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 /**
  * @author : yangqi
@@ -31,7 +31,7 @@ public class RowValue implements Serializable {
     /**
      * 一行数据的唯一键
      */
-    private String rowKey;
+    private Map<String, String> rowKeyMap;
 
     private Map<String, String> columnValueMap;
 
@@ -50,10 +50,11 @@ public class RowValue implements Serializable {
         rowValue.setColumnValueMap(params);
         TableInfo tableInfo = TableInfo.getTableInfo(tableName);
         List<String> uniqueColumn = tableInfo.getUniqueColumn();
-        StringBuilder builder = new StringBuilder();
-        builder.append(Constants.SEPARATOR);
-        uniqueColumn.forEach(column -> builder.append(params.get(column)).append(Constants.SEPARATOR));
-        rowValue.setRowKey(builder.toString());
+        Map<String, String> rowKeyMap = new TreeMap<>();
+        for (String column : uniqueColumn) {
+            rowKeyMap.put(column, params.get(column));
+        }
+        rowValue.setRowKeyMap(rowKeyMap);
         return rowValue;
     }
 
