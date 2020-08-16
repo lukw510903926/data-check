@@ -6,5 +6,15 @@ package com.mockuai.data.check;
  * @description :
  * @since : 2020-08-13 20:10
  */
-public class DataCheck {
+public enum DataCheckType {
+
+    /**
+     * 差异检查
+     */
+    DIFF_CHECK,
+
+    /**
+     * 延迟检查
+     */
+    DELAY_CHECK
 }
