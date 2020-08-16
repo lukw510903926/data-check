@@ -1,11 +1,15 @@
 package com.mockuai.data.check.strategy;
 
+import com.google.common.collect.Lists;
 import com.mockuai.data.check.DataCheckType;
+import com.mockuai.data.check.dto.DifferenceColumnValue;
 import com.mockuai.data.check.dto.EventData;
-import com.mockuai.data.check.dto.RowValue;
 import com.mockuai.data.check.dto.TableMapping;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @author : yangqi
@@ -30,16 +34,37 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
         TableMapping tableMapping = TableMapping.getTableMapping(tableName);
         String oldTable = tableMapping.getOldTable();
         if (tableMapping.getNewTable().equalsIgnoreCase(eventData.getTableName())) {
-            RowValue rowValue = this.getRowValue(oldTable, eventData.getAfterValue().getRowKey());
+            EventData rowValue = this.getRowValue(eventData, oldTable);
+            if (rowValue == null) {
+                return;
+            }
+            List<DifferenceColumnValue> diffValues = this.getDiffValues(eventData, rowValue);
+            if (CollectionUtils.isNotEmpty(diffValues)) {
+                for (DifferenceColumnValue diffValue : diffValues) {
+                    log.info("table {} diffValue {}", tableName, diffValue.toString());
+                }
+            }
         }
     }
 
     /**
      * 获取一行数据
      *
+     * @param eventData
      * @param tableName
-     * @param rowKey
      * @return
      */
-    public abstract RowValue getRowValue(String tableName, String rowKey);
+    public abstract EventData getRowValue(EventData eventData, String tableName);
+
+    /**
+     * 获取数据差异
+     *
+     * @param targetValue
+     * @param sourceValue
+     * @return
+     */
+    public List<DifferenceColumnValue> getDiffValues(EventData targetValue, EventData sourceValue) {
+
+        return Lists.newArrayList();
+    }
 }
