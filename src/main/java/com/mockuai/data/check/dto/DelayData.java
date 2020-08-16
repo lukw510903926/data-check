@@ -1,5 +1,6 @@
 package com.mockuai.data.check.dto;
 
+import com.alibaba.fastjson.JSON;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -42,4 +43,9 @@ public class DelayData implements Serializable {
      */
     private Long delay;
 
+    @Override
+    public String toString() {
+
+        return JSON.toJSONString(this);
+    }
 }

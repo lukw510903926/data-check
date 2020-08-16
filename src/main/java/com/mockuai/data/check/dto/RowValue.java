@@ -1,5 +1,6 @@
 package com.mockuai.data.check.dto;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import lombok.Data;
 
@@ -62,4 +63,9 @@ public class RowValue implements Serializable {
         return Optional.ofNullable(columnValueMap).map(map -> map.get(column)).orElse(null);
     }
 
+    @Override
+    public String toString() {
+
+        return JSON.toJSONString(this);
+    }
 }

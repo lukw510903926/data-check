@@ -1,5 +1,6 @@
 package com.mockuai.data.check.dto;
 
+import com.alibaba.fastjson.JSON;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -50,4 +51,10 @@ public class EventData implements Serializable {
      * 事件的时间戳
      */
     private Long occourTime;
+
+    @Override
+    public String toString() {
+
+        return JSON.toJSONString(this);
+    }
 }

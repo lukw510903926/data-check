@@ -1,5 +1,6 @@
 package com.mockuai.data.check.dto;
 
+import com.alibaba.fastjson.JSON;
 import lombok.Data;
 
 /**
@@ -24,5 +25,11 @@ public class DifferenceColumnValue {
         differenceColumnValue.setOriginalValue(originalValue);
         differenceColumnValue.setNewDataValue(newDataValue);
         return differenceColumnValue;
+    }
+
+    @Override
+    public String toString() {
+
+        return JSON.toJSONString(this);
     }
 }

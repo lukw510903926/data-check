@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mockuai.data.check.DataCheckType;
 import com.mockuai.data.check.dto.DifferenceColumnValue;
 import com.mockuai.data.check.dto.EventData;
+import com.mockuai.data.check.dto.RowValue;
 import com.mockuai.data.check.dto.TableMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -41,7 +42,7 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
             List<DifferenceColumnValue> diffValues = this.getDiffValues(eventData, rowValue);
             if (CollectionUtils.isNotEmpty(diffValues)) {
                 for (DifferenceColumnValue diffValue : diffValues) {
-                    log.info("table {} diffValue {}", tableName, diffValue.toString());
+                    log.info("table {} diffValue {}", tableName, diffValue);
                 }
             }
         }
@@ -65,6 +66,9 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
      */
     public List<DifferenceColumnValue> getDiffValues(EventData targetValue, EventData sourceValue) {
 
+        RowValue afterValue = targetValue.getAfterValue();
+        RowValue sourceAfterValue = sourceValue.getAfterValue();
+        log.info("afterValue {} sourceAfterValue {}", afterValue, sourceAfterValue);
         return Lists.newArrayList();
     }
 }
