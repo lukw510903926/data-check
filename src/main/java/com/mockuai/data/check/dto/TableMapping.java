@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author : yangqi
  * @email : lukewei@mockuai.com
- * @description :
+ * @description : 表映射
  * @since : 2020-08-03 16:24
  */
 @Getter
