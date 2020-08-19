@@ -1,7 +1,6 @@
 package com.mockuai.data.check.strategy;
 
 import com.alibaba.fastjson.JSON;
-import com.mockuai.data.check.DataCheckType;
 import com.mockuai.data.check.constants.Constants;
 import com.mockuai.data.check.dto.EventData;
 import com.mockuai.data.check.service.RedisService;

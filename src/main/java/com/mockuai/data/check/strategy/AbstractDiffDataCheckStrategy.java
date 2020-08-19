@@ -33,8 +33,8 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
 
         String tableName = eventData.getTableName();
         TableMapping tableMapping = TableMapping.getTableMapping(tableName);
-        String oldTable = tableMapping.getOldTable();
-        if (tableMapping.getNewTable().equalsIgnoreCase(eventData.getTableName())) {
+        String oldTable = tableMapping.getSourceTable();
+        if (tableMapping.getTargetTable().equalsIgnoreCase(eventData.getTableName())) {
             EventData rowValue = this.getRowValue(eventData, oldTable);
             if (rowValue == null) {
                 return;

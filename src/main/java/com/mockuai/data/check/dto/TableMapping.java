@@ -26,13 +26,13 @@ public enum TableMapping {
      */
     BRAND_INCOME("brand_income_daily_statistics", "finance_brand_income_daily_statistics");
 
-    private String oldTable;
+    private String sourceTable;
 
-    private String newTable;
+    private String targetTable;
 
-    TableMapping(String oldTable, String newTable) {
-        this.newTable = newTable;
-        this.oldTable = oldTable;
+    TableMapping(String sourceTable, String targetTable) {
+        this.sourceTable = sourceTable;
+        this.targetTable = targetTable;
     }
 
     /**
@@ -48,10 +48,10 @@ public enum TableMapping {
     static {
 
         for (TableMapping value : TableMapping.values()) {
-            MAPPING_MAP.put(value.getNewTable(), value);
-            MAPPING_MAP.put(value.getOldTable(), value);
-            TABLE_LIST.add(value.getNewTable());
-            TABLE_LIST.add(value.getOldTable());
+            MAPPING_MAP.put(value.getSourceTable(), value);
+            MAPPING_MAP.put(value.getTargetTable(), value);
+            TABLE_LIST.add(value.getSourceTable());
+            TABLE_LIST.add(value.getTargetTable());
         }
     }
 

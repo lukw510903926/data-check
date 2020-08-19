@@ -1,6 +1,5 @@
 package com.mockuai.data.check.strategy;
 
-import com.mockuai.data.check.DataCheckType;
 import com.mockuai.data.check.dto.EventData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
