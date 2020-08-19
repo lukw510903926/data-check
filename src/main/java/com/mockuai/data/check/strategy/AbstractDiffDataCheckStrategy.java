@@ -1,11 +1,10 @@
 package com.mockuai.data.check.strategy;
 
 import com.google.common.collect.Lists;
-import com.mockuai.data.check.DataCheckType;
+import com.mockuai.data.check.dto.DataStoreMapping;
 import com.mockuai.data.check.dto.DifferenceColumnValue;
 import com.mockuai.data.check.dto.EventData;
 import com.mockuai.data.check.dto.RowValue;
-import com.mockuai.data.check.dto.TableMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
@@ -32,9 +31,9 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
     public void comparison(EventData eventData) {
 
         String tableName = eventData.getTableName();
-        TableMapping tableMapping = TableMapping.getTableMapping(tableName);
-        String oldTable = tableMapping.getSourceTable();
-        if (tableMapping.getTargetTable().equalsIgnoreCase(eventData.getTableName())) {
+        DataStoreMapping tableMapping = DataStoreMapping.getTableMapping(tableName);
+        String oldTable = tableMapping.getSourceStore();
+        if (tableMapping.getTargetStore().equalsIgnoreCase(eventData.getTableName())) {
             EventData rowValue = this.getRowValue(eventData, oldTable);
             if (rowValue == null) {
                 return;
