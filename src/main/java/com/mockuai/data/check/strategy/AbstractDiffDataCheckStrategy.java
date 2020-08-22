@@ -90,10 +90,6 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
                 list.add(value);
                 continue;
             }
-            if (originalValue == null) {
-                value = DifferencePropertyValue.build(null, newDataValue, column);
-                list.add(value);
-            }
             if (!newDataValue.equals(originalValue)) {
                 value = DifferencePropertyValue.build(originalValue, newDataValue, column);
                 list.add(value);
