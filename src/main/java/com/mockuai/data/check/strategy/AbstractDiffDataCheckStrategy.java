@@ -33,31 +33,31 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
     @Override
     public void comparison(EventData eventData) {
 
-        String tableName = eventData.getTableName();
+        String tableName = eventData.getDataStore();
         DataStoreMapping tableMapping = DataStoreMapping.getTableMapping(tableName);
         String oldTable = tableMapping.getSourceStore();
-        if (tableMapping.getTargetStore().equalsIgnoreCase(eventData.getTableName())) {
+        if (tableMapping.getTargetStore().equalsIgnoreCase(eventData.getDataStore())) {
             EventData rowValue = this.getRowValue(eventData, oldTable);
             if (rowValue == null) {
                 return;
             }
             List<DifferencePropertyValue> diffValues = this.getDiffValues(eventData, rowValue);
-            if (CollectionUtils.isNotEmpty(diffValues)) {
-                for (DifferencePropertyValue diffValue : diffValues) {
-                    log.info("table {} diffValue {}", tableName, diffValue);
-                }
-            }
+            storeDiffValues(diffValues, tableName);
         }
     }
 
     /**
-     * 获取一行数据
+     * 差异数据保存
      *
-     * @param eventData
-     * @param tableName
-     * @return
+     * @param diffValues
      */
-    public abstract EventData getRowValue(EventData eventData, String tableName);
+    public void storeDiffValues(List<DifferencePropertyValue> diffValues, String dataStore) {
+        if (CollectionUtils.isNotEmpty(diffValues)) {
+            for (DifferencePropertyValue diffValue : diffValues) {
+                log.info("dataStore {} diffValue {}", dataStore, diffValue);
+            }
+        }
+    }
 
     /**
      * 获取数据差异
@@ -69,7 +69,7 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
     public List<DifferencePropertyValue> getDiffValues(EventData targetData, EventData sourceData) {
 
         List<DifferencePropertyValue> list = Lists.newArrayList();
-        String tableName = targetData.getTableName();
+        String tableName = targetData.getDataStore();
         RowValue afterValue = targetData.getAfterValue();
         RowValue sourceAfterValue = sourceData.getAfterValue();
         Map<String, String> sourceColumnValueMap = sourceAfterValue.getPropertyValueMap();

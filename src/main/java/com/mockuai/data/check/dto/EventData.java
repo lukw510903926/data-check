@@ -35,12 +35,7 @@ public class EventData implements Serializable {
     /**
      * 表名
      */
-    private String tableName;
-
-    /**
-     * 数据库
-     */
-    private String database;
+    private String dataStore;
 
     /**
      * 执行sql
