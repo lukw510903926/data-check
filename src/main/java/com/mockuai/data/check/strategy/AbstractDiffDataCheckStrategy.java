@@ -33,16 +33,16 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
     @Override
     public void comparison(EventData eventData) {
 
-        String tableName = eventData.getDataStore();
-        DataStoreMapping tableMapping = DataStoreMapping.getTableMapping(tableName);
-        String oldTable = tableMapping.getSourceStore();
-        if (tableMapping.getTargetStore().equalsIgnoreCase(eventData.getDataStore())) {
-            EventData rowValue = this.getRowValue(eventData, oldTable);
+        String dataStore = eventData.getDataStore();
+        DataStoreMapping dataStoreMapping = DataStoreMapping.getDataStoreMapping(dataStore);
+        String sourceStore = dataStoreMapping.getSourceStore();
+        if (dataStoreMapping.getTargetStore().equalsIgnoreCase(eventData.getDataStore())) {
+            EventData rowValue = this.getRowValue(eventData, sourceStore);
             if (rowValue == null) {
                 return;
             }
             List<DifferencePropertyValue> diffValues = this.getDiffValues(eventData, rowValue);
-            storeDiffValues(diffValues, tableName);
+            storeDiffValues(diffValues, dataStore);
         }
     }
 
@@ -69,29 +69,29 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
     public List<DifferencePropertyValue> getDiffValues(EventData targetData, EventData sourceData) {
 
         List<DifferencePropertyValue> list = Lists.newArrayList();
-        String tableName = targetData.getDataStore();
+        String dataStore = targetData.getDataStore();
         RowValue afterValue = targetData.getAfterValue();
         RowValue sourceAfterValue = sourceData.getAfterValue();
-        Map<String, String> sourceColumnValueMap = sourceAfterValue.getPropertyValueMap();
+        Map<String, String> sourcePropertyValueMap = sourceAfterValue.getPropertyValueMap();
         log.info("afterValue {} sourceAfterValue {}", afterValue, sourceAfterValue);
-        Map<String, String> columnValueMap = afterValue.getPropertyValueMap();
-        DataStoreInfo tableInfo = DataStoreMappingUtils.getTableInfo(tableName);
-        List<String> columnList = tableInfo.getColumnList();
+        Map<String, String> propertyValueMap = afterValue.getPropertyValueMap();
+        DataStoreInfo dataStoreInfo = DataStoreMappingUtils.getDataStoreInfo(dataStore);
+        List<String> propertyList = dataStoreInfo.getPropertyList();
         DifferencePropertyValue value;
-        for (String column : columnList) {
-            String newDataValue = columnValueMap.get(column);
-            String mappingColumn = DataStoreMappingUtils.getMappingProperty(tableName, column);
-            String originalValue = sourceColumnValueMap.get(mappingColumn);
+        for (String property : propertyList) {
+            String newDataValue = propertyValueMap.get(property);
+            String mappingProperty = DataStoreMappingUtils.getMappingProperty(dataStore, property);
+            String originalValue = sourcePropertyValueMap.get(mappingProperty);
             if (newDataValue == null && originalValue == null) {
                 continue;
             }
             if (newDataValue == null) {
-                value = DifferencePropertyValue.build(originalValue, null, column);
+                value = DifferencePropertyValue.build(originalValue, null, property);
                 list.add(value);
                 continue;
             }
             if (!newDataValue.equals(originalValue)) {
-                value = DifferencePropertyValue.build(originalValue, newDataValue, column);
+                value = DifferencePropertyValue.build(originalValue, newDataValue, property);
                 list.add(value);
             }
         }

@@ -26,9 +26,9 @@ public abstract class AbstractDelayCheckStrategy extends AbstractDataCheckStrate
     @Override
     public void comparison(EventData eventData) {
         String dataStore = eventData.getDataStore();
-        DataStoreMapping tableMapping = DataStoreMapping.getTableMapping(dataStore);
-        String sourceStore = tableMapping.getSourceStore();
-        if (tableMapping.getTargetStore().equalsIgnoreCase(eventData.getDataStore())) {
+        DataStoreMapping dataStoreMapping = DataStoreMapping.getDataStoreMapping(dataStore);
+        String sourceStore = dataStoreMapping.getSourceStore();
+        if (dataStoreMapping.getTargetStore().equalsIgnoreCase(eventData.getDataStore())) {
             EventData rowValue = this.getRowValue(eventData, sourceStore);
             if (rowValue == null) {
                 return;

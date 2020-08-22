@@ -37,8 +37,8 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
     @Override
     public void comparison(EventData eventData) {
 
-        String tableName = eventData.getDataStore();
-        String key = this.getKey(tableName, eventData.getAfterValue().getRowKeyMap());
+        String dataStore = eventData.getDataStore();
+        String key = this.getKey(dataStore, eventData.getAfterValue().getRowKeyMap());
         redisService.set(key, JSON.toJSONString(eventData), Constants.ONE_HOUR);
         super.comparison(eventData);
     }
@@ -52,16 +52,16 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
     }
 
     @Override
-    public EventData getRowValue(EventData eventData, String tableName) {
+    public EventData getRowValue(EventData eventData, String dataStore) {
 
-        String key = this.getKey(tableName, eventData.getAfterValue().getRowKeyMap());
+        String key = this.getKey(dataStore, eventData.getAfterValue().getRowKeyMap());
         Object o = redisService.get(key);
         return Optional.ofNullable(o).map(item -> JSON.parseObject(item.toString(), EventData.class)).orElse(null);
     }
 
-    public String getKey(String tableName, Map<String, String> rowKeyMap) {
+    public String getKey(String dataStore, Map<String, String> rowKeyMap) {
         StringBuilder builder = new StringBuilder();
         rowKeyMap.forEach((key, value) -> builder.append(value).append(Constants.SEPARATOR));
-        return Constants.ROW_KEY_PREFIX + DIFF_KEY + tableName + Constants.SEPARATOR + builder.toString();
+        return Constants.ROW_KEY_PREFIX + DIFF_KEY + dataStore + Constants.SEPARATOR + builder.toString();
     }
 }

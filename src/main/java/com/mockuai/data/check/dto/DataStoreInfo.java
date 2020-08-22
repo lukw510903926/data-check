@@ -16,9 +16,9 @@ public class DataStoreInfo {
     /**
      * 表名
      */
-    private String tableName;
+    private String dataStore;
 
-    private List<String> uniqueColumn;
+    private List<String> uniqueProperty;
 
-    private List<String> columnList;
+    private List<String> propertyList;
 }

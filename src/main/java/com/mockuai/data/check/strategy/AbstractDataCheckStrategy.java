@@ -15,10 +15,10 @@ public abstract class AbstractDataCheckStrategy implements DataCheckStrategy, In
      * 获取一行数据
      *
      * @param eventData
-     * @param tableName
+     * @param dataStore
      * @return
      */
-    public abstract EventData getRowValue(EventData eventData, String tableName);
+    public abstract EventData getRowValue(EventData eventData, String dataStore);
 
     /**
      * 获取策略名称

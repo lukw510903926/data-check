@@ -27,7 +27,7 @@ public class RowValue implements Serializable {
     private String database;
 
 
-    private String tableName;
+    private String dataStore;
 
     /**
      * 一行数据的唯一键
@@ -44,23 +44,23 @@ public class RowValue implements Serializable {
     public static RowValue build(List<PropertyValue> propertyValues, String database, String dataStore) {
 
         RowValue rowValue = new RowValue();
-        rowValue.setTableName(dataStore);
+        rowValue.setDataStore(dataStore);
         rowValue.setDatabase(database);
         Map<String, String> params = Maps.newHashMapWithExpectedSize(propertyValues.size());
-        propertyValues.forEach(columnValue -> params.put(columnValue.getProperty().toLowerCase(), columnValue.getValue()));
+        propertyValues.forEach(propertyValue -> params.put(propertyValue.getProperty().toLowerCase(), propertyValue.getValue()));
         rowValue.setPropertyValueMap(params);
-        DataStoreInfo tableInfo = DataStoreMappingUtils.getTableInfo(dataStore);
-        List<String> uniqueColumn = tableInfo.getUniqueColumn();
+        DataStoreInfo dataStoreInfo = DataStoreMappingUtils.getDataStoreInfo(dataStore);
+        List<String> uniqueProperty = dataStoreInfo.getUniqueProperty();
         Map<String, String> rowKeyMap = new TreeMap<>();
-        for (String column : uniqueColumn) {
-            rowKeyMap.put(column, params.get(column));
+        for (String property : uniqueProperty) {
+            rowKeyMap.put(property, params.get(property));
         }
         rowValue.setRowKeyMap(rowKeyMap);
         return rowValue;
     }
 
-    public String getColumnValue(String column) {
-        return Optional.ofNullable(propertyValueMap).map(map -> map.get(column)).orElse(null);
+    public String getPropertyValue(String property) {
+        return Optional.ofNullable(propertyValueMap).map(map -> map.get(property)).orElse(null);
     }
 
     @Override

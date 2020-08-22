@@ -13,26 +13,26 @@ import java.util.Optional;
 public class DataStoreMappingUtils {
 
     /**
-     * key tableName
+     * key dataStore
      * <p>
-     * value columnMapping  ->
+     * value propertyMapping  ->
      */
-    private static final Map<String, Map<String, String>> COLUMN_MAPPING_MAP = new HashMap<>();
+    private static final Map<String, Map<String, String>> PROPERTY_MAPPING_MAP = new HashMap<>();
 
-    private static final Map<String, DataStoreInfo> TABLE_INFO_MAP = new HashMap<>();
+    private static final Map<String, DataStoreInfo> DATA_STORE_INFO_MAP = new HashMap<>();
 
     public static String getMappingProperty(String dataStore, String property) {
 
-        return Optional.ofNullable(COLUMN_MAPPING_MAP.get(dataStore)).map(mapping -> mapping.get(property)).orElse(null);
+        return Optional.ofNullable(PROPERTY_MAPPING_MAP.get(dataStore)).map(mapping -> mapping.get(property)).orElse(null);
     }
 
-    public static DataStoreInfo getTableInfo(String dataStore) {
+    public static DataStoreInfo getDataStoreInfo(String dataStore) {
 
-        return TABLE_INFO_MAP.get(dataStore);
+        return DATA_STORE_INFO_MAP.get(dataStore);
     }
 
-    public static void addTableInfo(String dataStore, DataStoreInfo dataStoreInfo) {
+    public static void addDataStoreInfo(String dataStore, DataStoreInfo dataStoreInfo) {
 
-        TABLE_INFO_MAP.put(dataStore, dataStoreInfo);
+        DATA_STORE_INFO_MAP.put(dataStore, dataStoreInfo);
     }
 }

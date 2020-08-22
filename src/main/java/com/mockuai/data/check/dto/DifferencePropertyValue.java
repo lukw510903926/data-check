@@ -20,11 +20,11 @@ public class DifferencePropertyValue {
 
     public static DifferencePropertyValue build(Object originalValue, Object newDataValue, String property) {
 
-        DifferencePropertyValue differenceColumnValue = new DifferencePropertyValue();
-        differenceColumnValue.setProperty(property);
-        differenceColumnValue.setOriginalValue(originalValue);
-        differenceColumnValue.setNewDataValue(newDataValue);
-        return differenceColumnValue;
+        DifferencePropertyValue differencePropertyValue = new DifferencePropertyValue();
+        differencePropertyValue.setProperty(property);
+        differencePropertyValue.setOriginalValue(originalValue);
+        differencePropertyValue.setNewDataValue(newDataValue);
+        return differencePropertyValue;
     }
 
     @Override

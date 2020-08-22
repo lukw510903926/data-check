@@ -19,7 +19,7 @@ public class DataStoreMapping {
     /**
      * 表list
      */
-    private static final List<String> TABLE_LIST = Lists.newArrayList();
+    private static final List<String> DATA_STORE_LIST = Lists.newArrayList();
 
     /**
      * 表间的映射
@@ -30,7 +30,7 @@ public class DataStoreMapping {
 
     private String targetStore;
 
-    public static DataStoreMapping getTableMapping(String dataStore) {
+    public static DataStoreMapping getDataStoreMapping(String dataStore) {
         return MAPPING_MAP.get(dataStore);
     }
 
