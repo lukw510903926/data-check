@@ -10,18 +10,18 @@ import lombok.Data;
  * @since : 2020-08-04 13:32
  */
 @Data
-public class DifferenceColumnValue {
+public class DifferencePropertyValue {
 
     private Object originalValue;
 
     private Object newDataValue;
 
-    private String column;
+    private String property;
 
-    public static DifferenceColumnValue build(Object originalValue, Object newDataValue, String column) {
+    public static DifferencePropertyValue build(Object originalValue, Object newDataValue, String property) {
 
-        DifferenceColumnValue differenceColumnValue = new DifferenceColumnValue();
-        differenceColumnValue.setColumn(column);
+        DifferencePropertyValue differenceColumnValue = new DifferencePropertyValue();
+        differenceColumnValue.setProperty(property);
         differenceColumnValue.setOriginalValue(originalValue);
         differenceColumnValue.setNewDataValue(newDataValue);
         return differenceColumnValue;

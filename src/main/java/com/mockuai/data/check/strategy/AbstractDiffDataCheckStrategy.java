@@ -1,8 +1,10 @@
 package com.mockuai.data.check.strategy;
 
 import com.google.common.collect.Lists;
+import com.mockuai.data.check.dto.DataStoreInfo;
 import com.mockuai.data.check.dto.DataStoreMapping;
-import com.mockuai.data.check.dto.DifferenceColumnValue;
+import com.mockuai.data.check.dto.DataStoreMappingUtils;
+import com.mockuai.data.check.dto.DifferencePropertyValue;
 import com.mockuai.data.check.dto.EventData;
 import com.mockuai.data.check.dto.RowValue;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +12,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author : yangqi
@@ -38,9 +41,9 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
             if (rowValue == null) {
                 return;
             }
-            List<DifferenceColumnValue> diffValues = this.getDiffValues(eventData, rowValue);
+            List<DifferencePropertyValue> diffValues = this.getDiffValues(eventData, rowValue);
             if (CollectionUtils.isNotEmpty(diffValues)) {
-                for (DifferenceColumnValue diffValue : diffValues) {
+                for (DifferencePropertyValue diffValue : diffValues) {
                     log.info("table {} diffValue {}", tableName, diffValue);
                 }
             }
@@ -59,15 +62,43 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
     /**
      * 获取数据差异
      *
-     * @param targetValue
-     * @param sourceValue
+     * @param targetData
+     * @param sourceData
      * @return
      */
-    public List<DifferenceColumnValue> getDiffValues(EventData targetValue, EventData sourceValue) {
+    public List<DifferencePropertyValue> getDiffValues(EventData targetData, EventData sourceData) {
 
-        RowValue afterValue = targetValue.getAfterValue();
-        RowValue sourceAfterValue = sourceValue.getAfterValue();
+        List<DifferencePropertyValue> list = Lists.newArrayList();
+        String tableName = targetData.getTableName();
+        RowValue afterValue = targetData.getAfterValue();
+        RowValue sourceAfterValue = sourceData.getAfterValue();
+        Map<String, String> sourceColumnValueMap = sourceAfterValue.getPropertyValueMap();
         log.info("afterValue {} sourceAfterValue {}", afterValue, sourceAfterValue);
-        return Lists.newArrayList();
+        Map<String, String> columnValueMap = afterValue.getPropertyValueMap();
+        DataStoreInfo tableInfo = DataStoreMappingUtils.getTableInfo(tableName);
+        List<String> columnList = tableInfo.getColumnList();
+        DifferencePropertyValue value;
+        for (String column : columnList) {
+            String newDataValue = columnValueMap.get(column);
+            String mappingColumn = DataStoreMappingUtils.getMappingProperty(tableName, column);
+            String originalValue = sourceColumnValueMap.get(mappingColumn);
+            if (newDataValue == null && originalValue == null) {
+                continue;
+            }
+            if (newDataValue == null) {
+                value = DifferencePropertyValue.build(originalValue, null, column);
+                list.add(value);
+                continue;
+            }
+            if (originalValue == null) {
+                value = DifferencePropertyValue.build(null, newDataValue, column);
+                list.add(value);
+            }
+            if (!newDataValue.equals(originalValue)) {
+                value = DifferencePropertyValue.build(originalValue, newDataValue, column);
+                list.add(value);
+            }
+        }
+        return list;
     }
 }

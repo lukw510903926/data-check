@@ -2,6 +2,7 @@ package com.mockuai.data.check.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
@@ -17,9 +18,10 @@ import java.util.concurrent.TimeUnit;
  * @description :
  * @since : 2020-08-16 16:51
  */
+@Component
 public class RedisServiceImpl implements RedisService {
 
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<Object, Object> redisTemplate;
 
     private static final long ZERO = 0L;
 
@@ -27,7 +29,7 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     @Autowired
-    public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
+    public void setRedisTemplate(RedisTemplate<Object, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 

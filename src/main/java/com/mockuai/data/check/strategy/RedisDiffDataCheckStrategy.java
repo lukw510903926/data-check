@@ -2,12 +2,16 @@ package com.mockuai.data.check.strategy;
 
 import com.alibaba.fastjson.JSON;
 import com.mockuai.data.check.constants.Constants;
+import com.mockuai.data.check.dto.DataStoreMapping;
+import com.mockuai.data.check.dto.DifferencePropertyValue;
 import com.mockuai.data.check.dto.EventData;
 import com.mockuai.data.check.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -37,7 +41,19 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
         String tableName = eventData.getTableName();
         String key = this.getKey(tableName, eventData.getAfterValue().getRowKeyMap());
         redisService.set(key, JSON.toJSONString(eventData), Constants.ONE_HOUR);
-        super.comparison(eventData);
+        DataStoreMapping tableMapping = DataStoreMapping.getTableMapping(tableName);
+        String sourceStore = tableMapping.getSourceStore();
+        String diffRedisKey = Constants.ROW_KEY_PREFIX + DIFF_KEY + tableName;
+        if (tableMapping.getTargetStore().equalsIgnoreCase(eventData.getTableName())) {
+            EventData rowValue = this.getRowValue(eventData, sourceStore);
+            if (rowValue == null) {
+                return;
+            }
+            List<DifferencePropertyValue> diffValues = this.getDiffValues(eventData, rowValue);
+            if (CollectionUtils.isNotEmpty(diffValues)) {
+                this.redisService.set(diffRedisKey, JSON.toJSONString(diffValues), Constants.ONE_HOUR);
+            }
+        }
     }
 
     @Override

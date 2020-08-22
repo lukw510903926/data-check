@@ -34,22 +34,22 @@ public class RowValue implements Serializable {
      */
     private Map<String, String> rowKeyMap;
 
-    private Map<String, String> columnValueMap;
+    private Map<String, String> propertyValueMap;
 
     /**
      * 事件的时间戳
      */
     private Long occourTime;
 
-    public static RowValue build(List<ColumnValue> columnValues, String database, String tableName) {
+    public static RowValue build(List<PropertyValue> propertyValues, String database, String dataStore) {
 
         RowValue rowValue = new RowValue();
-        rowValue.setTableName(tableName);
+        rowValue.setTableName(dataStore);
         rowValue.setDatabase(database);
-        Map<String, String> params = Maps.newHashMapWithExpectedSize(columnValues.size());
-        columnValues.forEach(columnValue -> params.put(columnValue.getColumn().toLowerCase(), columnValue.getValue()));
-        rowValue.setColumnValueMap(params);
-        TableInfo tableInfo = TableInfo.getTableInfo(tableName);
+        Map<String, String> params = Maps.newHashMapWithExpectedSize(propertyValues.size());
+        propertyValues.forEach(columnValue -> params.put(columnValue.getProperty().toLowerCase(), columnValue.getValue()));
+        rowValue.setPropertyValueMap(params);
+        DataStoreInfo tableInfo = DataStoreMappingUtils.getTableInfo(dataStore);
         List<String> uniqueColumn = tableInfo.getUniqueColumn();
         Map<String, String> rowKeyMap = new TreeMap<>();
         for (String column : uniqueColumn) {
@@ -60,7 +60,7 @@ public class RowValue implements Serializable {
     }
 
     public String getColumnValue(String column) {
-        return Optional.ofNullable(columnValueMap).map(map -> map.get(column)).orElse(null);
+        return Optional.ofNullable(propertyValueMap).map(map -> map.get(column)).orElse(null);
     }
 
     @Override
