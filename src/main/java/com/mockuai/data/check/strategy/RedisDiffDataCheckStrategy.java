@@ -27,7 +27,9 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
     @Resource
     private RedisService redisService;
 
-    private static final String DIFF_KEY = "diff_key";
+    private static final String DIFF_PREFIX_KEY = "diff:key";
+
+    private static final String DIFF_RESULT = "result";
 
     @Override
     public String getName() {
@@ -44,11 +46,12 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
     }
 
     @Override
-    public void storeDiffValues(List<DifferencePropertyValue> diffValues, String dataStore) {
-        super.storeDiffValues(diffValues, dataStore);
-        String diffRedisKey = Constants.ROW_KEY_PREFIX + DIFF_KEY + Constants.SEPARATOR + dataStore;
+    public void storeDiffValues(List<DifferencePropertyValue> diffValues, EventData eventData) {
+        super.storeDiffValues(diffValues, eventData);
+        String diffKey = this.getKey(eventData.getDataStore(), eventData.getAfterValue().getRowKeyMap());
+        String diffResultKey = diffKey + Constants.SEPARATOR + DIFF_RESULT;
         if (CollectionUtils.isNotEmpty(diffValues)) {
-            this.redisService.set(diffRedisKey, JSON.toJSONString(diffValues), Constants.ONE_HOUR);
+            this.redisService.set(diffResultKey, JSON.toJSONString(diffValues), Constants.ONE_HOUR);
         }
     }
 
@@ -64,6 +67,6 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
         StringBuilder builder = new StringBuilder();
         rowKeyMap.forEach((key, value) -> builder.append(value).append(Constants.SEPARATOR));
         String substring = builder.toString().substring(0, builder.lastIndexOf(":"));
-        return Constants.ROW_KEY_PREFIX + DIFF_KEY + Constants.SEPARATOR + dataStore + Constants.SEPARATOR + substring;
+        return Constants.ROW_KEY_PREFIX + DIFF_PREFIX_KEY + Constants.SEPARATOR + dataStore + Constants.SEPARATOR + substring;
     }
 }

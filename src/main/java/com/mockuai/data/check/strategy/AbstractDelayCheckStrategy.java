@@ -31,7 +31,7 @@ public abstract class AbstractDelayCheckStrategy extends AbstractDataCheckStrate
         log.info("delay data check eventValue {}", eventData);
         if (dataStoreMapping.getTargetStore().equalsIgnoreCase(eventData.getDataStore())) {
             List<DelayData> delayData = this.getDelayDataList(eventData);
-            storeDelayData(delayData, dataStore);
+            storeDelayData(delayData, eventData);
         }
     }
 
@@ -40,10 +40,10 @@ public abstract class AbstractDelayCheckStrategy extends AbstractDataCheckStrate
         return Lists.newArrayList();
     }
 
-    public void storeDelayData(List<DelayData> delayDataList, String dataStore) {
+    public void storeDelayData(List<DelayData> delayDataList, EventData eventData) {
 
         for (DelayData delayData : delayDataList) {
-            log.info("dataStore {} property {} delayData {} ", dataStore, delayData.getProperty(), JSON.toJSONString(delayData));
+            log.info("dataStore {} property {} delayData {} ", eventData.getDataStore(), delayData.getProperty(), JSON.toJSONString(delayData));
         }
     }
 

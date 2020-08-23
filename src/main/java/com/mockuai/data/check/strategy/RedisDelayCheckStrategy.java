@@ -30,6 +30,8 @@ public class RedisDelayCheckStrategy extends AbstractDelayCheckStrategy {
 
     private static final String DELAY_KEY = "delay_key";
 
+    private static final String DELAY_RESULT = "result";
+
     @Resource
     private RedisService redisService;
 
@@ -74,12 +76,15 @@ public class RedisDelayCheckStrategy extends AbstractDelayCheckStrategy {
     }
 
     @Override
-    public void storeDelayData(List<DelayData> delayDataList, String dataStore) {
+    public void storeDelayData(List<DelayData> delayDataList, EventData eventData) {
 
-        super.storeDelayData(delayDataList, dataStore);
-        String diffRedisKey = Constants.ROW_KEY_PREFIX + DELAY_KEY + Constants.SEPARATOR + dataStore;
+        super.storeDelayData(delayDataList, eventData);
         if (CollectionUtils.isNotEmpty(delayDataList)) {
-            this.redisService.set(diffRedisKey, JSON.toJSONString(delayDataList), Constants.ONE_HOUR);
+            for (DelayData delayData : delayDataList) {
+                String propertyKey = this.getPropertyKey(delayData.getProperty(), eventData.getAfterValue());
+                String diffRedisKey = propertyKey + Constants.SEPARATOR + DELAY_RESULT;
+                this.redisService.set(diffRedisKey, JSON.toJSONString(delayData), Constants.ONE_HOUR);
+            }
         }
     }
 

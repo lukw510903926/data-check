@@ -42,7 +42,7 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
                 return;
             }
             List<DifferencePropertyValue> diffValues = this.getDiffValues(eventData, rowValue);
-            storeDiffValues(diffValues, dataStore);
+            storeDiffValues(diffValues, eventData);
         }
     }
 
@@ -51,10 +51,10 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
      *
      * @param diffValues
      */
-    public void storeDiffValues(List<DifferencePropertyValue> diffValues, String dataStore) {
+    public void storeDiffValues(List<DifferencePropertyValue> diffValues, EventData eventData) {
         if (CollectionUtils.isNotEmpty(diffValues)) {
             for (DifferencePropertyValue diffValue : diffValues) {
-                log.info("dataStore {} diffValue {}", dataStore, diffValue);
+                log.info("dataStore {} diffValue {}", eventData.getDataStore(), diffValue);
             }
         }
     }
