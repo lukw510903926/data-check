@@ -41,8 +41,13 @@ public class DataStoreMappingUtils {
         return MAPPING_MAP.get(dataStore);
     }
 
-    public void addDataStoreMapping(DataStoreMapping dataStoreMapping) {
+    public static void addDataStoreMapping(DataStoreMapping dataStoreMapping) {
         MAPPING_MAP.put(dataStoreMapping.getSourceStore(), dataStoreMapping);
         MAPPING_MAP.put(dataStoreMapping.getTargetStore(), dataStoreMapping);
+    }
+
+    public static boolean containDataStore(String dataStore) {
+
+        return MAPPING_MAP.containsKey(dataStore);
     }
 }

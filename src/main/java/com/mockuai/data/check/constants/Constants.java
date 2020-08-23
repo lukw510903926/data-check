@@ -24,5 +24,5 @@ public class Constants {
     /**
      * 一小时
      */
-    public static final Long ONE_HOUR = 60L;
+    public static final Long ONE_HOUR = 60L * 60;
 }

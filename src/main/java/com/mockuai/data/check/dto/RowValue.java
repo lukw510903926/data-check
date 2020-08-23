@@ -41,11 +41,10 @@ public class RowValue implements Serializable {
      */
     private Long occourTime;
 
-    public static RowValue build(List<PropertyValue> propertyValues, String database, String dataStore) {
+    public static RowValue build(List<PropertyValue> propertyValues, String dataStore) {
 
         RowValue rowValue = new RowValue();
         rowValue.setDataStore(dataStore);
-        rowValue.setDatabase(database);
         Map<String, String> params = Maps.newHashMapWithExpectedSize(propertyValues.size());
         propertyValues.forEach(propertyValue -> params.put(propertyValue.getProperty().toLowerCase(), propertyValue.getValue()));
         rowValue.setPropertyValueMap(params);

@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisServiceImpl implements RedisService {
 
-    private RedisTemplate<Object, Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     private static final long ZERO = 0L;
 
@@ -29,7 +29,7 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     @Autowired
-    public void setRedisTemplate(RedisTemplate<Object, Object> redisTemplate) {
+    public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 

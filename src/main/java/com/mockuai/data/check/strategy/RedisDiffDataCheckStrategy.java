@@ -45,7 +45,8 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
 
     @Override
     public void storeDiffValues(List<DifferencePropertyValue> diffValues, String dataStore) {
-        String diffRedisKey = Constants.ROW_KEY_PREFIX + DIFF_KEY + dataStore;
+        super.storeDiffValues(diffValues, dataStore);
+        String diffRedisKey = Constants.ROW_KEY_PREFIX + DIFF_KEY + Constants.SEPARATOR + dataStore;
         if (CollectionUtils.isNotEmpty(diffValues)) {
             this.redisService.set(diffRedisKey, JSON.toJSONString(diffValues), Constants.ONE_HOUR);
         }
@@ -62,6 +63,7 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
     public String getKey(String dataStore, Map<String, String> rowKeyMap) {
         StringBuilder builder = new StringBuilder();
         rowKeyMap.forEach((key, value) -> builder.append(value).append(Constants.SEPARATOR));
-        return Constants.ROW_KEY_PREFIX + DIFF_KEY + dataStore + Constants.SEPARATOR + builder.toString();
+        String substring = builder.toString().substring(0, builder.lastIndexOf(":"));
+        return Constants.ROW_KEY_PREFIX + dataStore + Constants.SEPARATOR + substring;
     }
 }

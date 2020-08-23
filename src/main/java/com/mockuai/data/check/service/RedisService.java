@@ -18,7 +18,7 @@ public interface RedisService {
     /**
      * @param redisTemplate
      */
-    void setRedisTemplate(RedisTemplate<Object, Object> redisTemplate);
+    void setRedisTemplate(RedisTemplate<String, Object> redisTemplate);
 
     // =============================common============================
 

@@ -1,5 +1,8 @@
 package com.mockuai.data.check.strategy;
 
+import com.google.common.collect.Lists;
+
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,5 +25,9 @@ public class DataCheckStrategyHolder {
 
     public static DataCheckStrategy getStrategy(String strategy) {
         return CHECK_STRATEGY_MAP.get(strategy);
+    }
+
+    public static List<DataCheckStrategy> getStrategyList() {
+        return Lists.newArrayList(CHECK_STRATEGY_MAP.values());
     }
 }
