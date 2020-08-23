@@ -1,5 +1,7 @@
 package com.mockuai.data.check.dto;
 
+import com.google.common.collect.Maps;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -13,17 +15,16 @@ import java.util.Optional;
 public class DataStoreMappingUtils {
 
     /**
-     * key dataStore
-     * <p>
-     * value propertyMapping  ->
+     * 表间的映射
+     * 源数据
      */
-    private static final Map<String, Map<String, String>> PROPERTY_MAPPING_MAP = new HashMap<>();
+    private static final Map<String, DataStoreMapping> MAPPING_MAP = Maps.newHashMap();
 
     private static final Map<String, DataStoreInfo> DATA_STORE_INFO_MAP = new HashMap<>();
 
     public static String getMappingProperty(String dataStore, String property) {
 
-        return Optional.ofNullable(PROPERTY_MAPPING_MAP.get(dataStore)).map(mapping -> mapping.get(property)).orElse(null);
+        return Optional.ofNullable(MAPPING_MAP.get(dataStore)).map(DataStoreMapping::getPropertyMapping).map(mapping -> mapping.get(property)).orElse(null);
     }
 
     public static DataStoreInfo getDataStoreInfo(String dataStore) {
@@ -34,5 +35,14 @@ public class DataStoreMappingUtils {
     public static void addDataStoreInfo(String dataStore, DataStoreInfo dataStoreInfo) {
 
         DATA_STORE_INFO_MAP.put(dataStore, dataStoreInfo);
+    }
+
+    public static DataStoreMapping getDataStoreMapping(String dataStore) {
+        return MAPPING_MAP.get(dataStore);
+    }
+
+    public void addDataStoreMapping(DataStoreMapping dataStoreMapping) {
+        MAPPING_MAP.put(dataStoreMapping.getSourceStore(), dataStoreMapping);
+        MAPPING_MAP.put(dataStoreMapping.getTargetStore(), dataStoreMapping);
     }
 }

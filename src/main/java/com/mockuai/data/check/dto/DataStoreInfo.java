@@ -18,7 +18,13 @@ public class DataStoreInfo {
      */
     private String dataStore;
 
+    /**
+     * 唯一属性列表
+     */
     private List<String> uniqueProperty;
 
+    /**
+     * 比对属性列表
+     */
     private List<String> propertyList;
 }

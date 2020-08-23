@@ -1,11 +1,10 @@
 package com.mockuai.data.check.dto;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author : yangqi
@@ -17,21 +16,31 @@ import java.util.Map;
 public class DataStoreMapping {
 
     /**
-     * 表list
+     * 源数据名称
      */
-    private static final List<String> DATA_STORE_LIST = Lists.newArrayList();
-
-    /**
-     * 表间的映射
-     */
-    private static final Map<String, DataStoreMapping> MAPPING_MAP = Maps.newHashMap();
-
     private String sourceStore;
 
+    /**
+     * 要比对的数据名称
+     */
     private String targetStore;
 
-    public static DataStoreMapping getDataStoreMapping(String dataStore) {
-        return MAPPING_MAP.get(dataStore);
-    }
+    /**
+     * 属性映射
+     */
+    private Map<String, String> propertyMapping;
 
+    /**
+     * 添加属性映射
+     *
+     * @param sourceProperty
+     * @param targetProperty
+     */
+    public DataStoreMapping addPropertyMapping(String sourceProperty, String targetProperty) {
+
+        propertyMapping = Optional.ofNullable(propertyMapping).orElse(Maps.newHashMap());
+        propertyMapping.put(sourceProperty, targetProperty);
+        propertyMapping.put(targetProperty, sourceProperty);
+        return this;
+    }
 }

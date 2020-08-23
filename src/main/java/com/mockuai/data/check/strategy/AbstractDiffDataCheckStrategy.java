@@ -34,7 +34,7 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
     public void comparison(EventData eventData) {
 
         String dataStore = eventData.getDataStore();
-        DataStoreMapping dataStoreMapping = DataStoreMapping.getDataStoreMapping(dataStore);
+        DataStoreMapping dataStoreMapping = DataStoreMappingUtils.getDataStoreMapping(dataStore);
         String sourceStore = dataStoreMapping.getSourceStore();
         if (dataStoreMapping.getTargetStore().equalsIgnoreCase(eventData.getDataStore())) {
             EventData rowValue = this.getRowValue(eventData, sourceStore);
