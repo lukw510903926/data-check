@@ -64,6 +64,6 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
         StringBuilder builder = new StringBuilder();
         rowKeyMap.forEach((key, value) -> builder.append(value).append(Constants.SEPARATOR));
         String substring = builder.toString().substring(0, builder.lastIndexOf(":"));
-        return Constants.ROW_KEY_PREFIX + dataStore + Constants.SEPARATOR + substring;
+        return Constants.ROW_KEY_PREFIX + DIFF_KEY + Constants.SEPARATOR + dataStore + Constants.SEPARATOR + substring;
     }
 }
