@@ -28,18 +28,14 @@ public abstract class AbstractDelayCheckStrategy extends AbstractDataCheckStrate
     public void comparison(EventData eventData) {
         String dataStore = eventData.getDataStore();
         DataStoreMapping dataStoreMapping = DataStoreMappingUtils.getDataStoreMapping(dataStore);
-        String sourceStore = dataStoreMapping.getSourceStore();
+        log.info("delay data check eventValue {}", eventData);
         if (dataStoreMapping.getTargetStore().equalsIgnoreCase(eventData.getDataStore())) {
-            EventData rowValue = this.getRowValue(eventData, sourceStore);
-            if (rowValue == null) {
-                return;
-            }
-            List<DelayData> delayData = this.getDelayDataList(eventData, rowValue);
+            List<DelayData> delayData = this.getDelayDataList(eventData);
             storeDelayData(delayData, dataStore);
         }
     }
 
-    public List<DelayData> getDelayDataList(EventData targetData, EventData sourceData) {
+    public List<DelayData> getDelayDataList(EventData targetData) {
 
         return Lists.newArrayList();
     }
@@ -49,6 +45,11 @@ public abstract class AbstractDelayCheckStrategy extends AbstractDataCheckStrate
         for (DelayData delayData : delayDataList) {
             log.info("dataStore {} property {} delayData {} ", dataStore, delayData.getProperty(), JSON.toJSONString(delayData));
         }
+    }
+
+    @Override
+    public EventData getRowValue(EventData eventData, String dataStore) {
+        return null;
     }
 
     @Override
