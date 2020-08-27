@@ -11,24 +11,24 @@ import java.io.Serializable;
  * @since : 2020-08-03 16:53
  */
 @Data
-public class ColumnValue implements Serializable {
+public class PropertyValue implements Serializable {
     private static final long serialVersionUID = 2573409139708694015L;
 
     /**
      * 列名
      */
-    private String column;
+    private String property;
 
     /**
      * 值
      */
     private String value;
 
-    public static ColumnValue build(String column, String value) {
+    public static PropertyValue build(String property, String value) {
 
-        ColumnValue columnValues = new ColumnValue();
-        columnValues.setColumn(column);
-        columnValues.setValue(value);
-        return columnValues;
+        PropertyValue propertyValue = new PropertyValue();
+        propertyValue.setProperty(property);
+        propertyValue.setValue(value);
+        return propertyValue;
     }
 }

@@ -1,16 +1,18 @@
 package com.mockuai.data.check.strategy;
 
 import com.google.common.collect.Lists;
-import com.mockuai.data.check.DataCheckType;
-import com.mockuai.data.check.dto.DifferenceColumnValue;
+import com.mockuai.data.check.dto.DataStoreInfo;
+import com.mockuai.data.check.dto.DataStoreMapping;
+import com.mockuai.data.check.dto.DataStoreMappingUtils;
+import com.mockuai.data.check.dto.DifferencePropertyValue;
 import com.mockuai.data.check.dto.EventData;
 import com.mockuai.data.check.dto.RowValue;
-import com.mockuai.data.check.dto.TableMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author : yangqi
@@ -31,44 +33,68 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
     @Override
     public void comparison(EventData eventData) {
 
-        String tableName = eventData.getTableName();
-        TableMapping tableMapping = TableMapping.getTableMapping(tableName);
-        String oldTable = tableMapping.getOldTable();
-        if (tableMapping.getNewTable().equalsIgnoreCase(eventData.getTableName())) {
-            EventData rowValue = this.getRowValue(eventData, oldTable);
+        String dataStore = eventData.getDataStore();
+        DataStoreMapping dataStoreMapping = DataStoreMappingUtils.getDataStoreMapping(dataStore);
+        String sourceStore = dataStoreMapping.getSourceStore();
+        if (dataStoreMapping.getTargetStore().equalsIgnoreCase(eventData.getDataStore())) {
+            EventData rowValue = this.getRowValue(eventData, sourceStore);
             if (rowValue == null) {
                 return;
             }
-            List<DifferenceColumnValue> diffValues = this.getDiffValues(eventData, rowValue);
-            if (CollectionUtils.isNotEmpty(diffValues)) {
-                for (DifferenceColumnValue diffValue : diffValues) {
-                    log.info("table {} diffValue {}", tableName, diffValue);
-                }
+            List<DifferencePropertyValue> diffValues = this.getDiffValues(eventData, rowValue);
+            storeDiffValues(diffValues, eventData);
+        }
+    }
+
+    /**
+     * 差异数据保存
+     *
+     * @param diffValues
+     */
+    public void storeDiffValues(List<DifferencePropertyValue> diffValues, EventData eventData) {
+        if (CollectionUtils.isNotEmpty(diffValues)) {
+            for (DifferencePropertyValue diffValue : diffValues) {
+                log.info("dataStore {} diffValue {}", eventData.getDataStore(), diffValue);
             }
         }
     }
 
     /**
-     * 获取一行数据
-     *
-     * @param eventData
-     * @param tableName
-     * @return
-     */
-    public abstract EventData getRowValue(EventData eventData, String tableName);
-
-    /**
      * 获取数据差异
      *
-     * @param targetValue
-     * @param sourceValue
+     * @param targetData
+     * @param sourceData
      * @return
      */
-    public List<DifferenceColumnValue> getDiffValues(EventData targetValue, EventData sourceValue) {
+    public List<DifferencePropertyValue> getDiffValues(EventData targetData, EventData sourceData) {
 
-        RowValue afterValue = targetValue.getAfterValue();
-        RowValue sourceAfterValue = sourceValue.getAfterValue();
+        List<DifferencePropertyValue> list = Lists.newArrayList();
+        String dataStore = targetData.getDataStore();
+        RowValue afterValue = targetData.getAfterValue();
+        RowValue sourceAfterValue = sourceData.getAfterValue();
+        Map<String, String> sourcePropertyValueMap = sourceAfterValue.getPropertyValueMap();
         log.info("afterValue {} sourceAfterValue {}", afterValue, sourceAfterValue);
-        return Lists.newArrayList();
+        Map<String, String> propertyValueMap = afterValue.getPropertyValueMap();
+        DataStoreInfo dataStoreInfo = DataStoreMappingUtils.getDataStoreInfo(dataStore);
+        List<String> propertyList = dataStoreInfo.getPropertyList();
+        DifferencePropertyValue value;
+        for (String property : propertyList) {
+            String newDataValue = propertyValueMap.get(property);
+            String mappingProperty = DataStoreMappingUtils.getMappingProperty(dataStore, property);
+            String originalValue = sourcePropertyValueMap.get(mappingProperty);
+            if (newDataValue == null && originalValue == null) {
+                continue;
+            }
+            if (newDataValue == null) {
+                value = DifferencePropertyValue.build(originalValue, null, property);
+                list.add(value);
+                continue;
+            }
+            if (!newDataValue.equals(originalValue)) {
+                value = DifferencePropertyValue.build(originalValue, newDataValue, property);
+                list.add(value);
+            }
+        }
+        return list;
     }
 }

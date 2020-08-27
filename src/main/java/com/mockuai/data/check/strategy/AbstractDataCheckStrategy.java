@@ -1,5 +1,6 @@
 package com.mockuai.data.check.strategy;
 
+import com.mockuai.data.check.dto.EventData;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
@@ -10,6 +11,14 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public abstract class AbstractDataCheckStrategy implements DataCheckStrategy, InitializingBean {
 
+    /**
+     * 获取一行数据
+     *
+     * @param eventData
+     * @param dataStore
+     * @return
+     */
+    public abstract EventData getRowValue(EventData eventData, String dataStore);
 
     /**
      * 获取策略名称

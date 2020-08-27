@@ -1,4 +1,4 @@
-package com.mockuai.data.check;
+package com.mockuai.data.check.strategy;
 
 /**
  * @author : yangqi

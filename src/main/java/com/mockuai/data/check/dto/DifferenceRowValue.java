@@ -13,9 +13,9 @@ import java.util.List;
 @Data
 public class DifferenceRowValue {
 
-    private List<DifferenceColumnValue> list;
+    private List<DifferencePropertyValue> list;
 
-    private String tableName;
+    private String dataStore;
 
     private String rowKey;
 }

@@ -22,12 +22,7 @@ public class Constants {
     public static final String ROW_KEY_PREFIX = "data:check:prefix:" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + SEPARATOR;
 
     /**
-     * 一分钟
-     */
-    public static final Long ONE_MINUTES = 60L;
-
-    /**
      * 一小时
      */
-    public static final Long ONE_HOUR = 60L;
+    public static final Long ONE_HOUR = 60L * 60;
 }

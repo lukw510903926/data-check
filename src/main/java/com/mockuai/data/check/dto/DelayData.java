@@ -21,7 +21,7 @@ public class DelayData implements Serializable {
     /**
      * 属性
      */
-    private String attribute;
+    private String property;
 
     /**
      * 属性值

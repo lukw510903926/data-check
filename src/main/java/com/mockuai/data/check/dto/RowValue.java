@@ -27,40 +27,39 @@ public class RowValue implements Serializable {
     private String database;
 
 
-    private String tableName;
+    private String dataStore;
 
     /**
      * 一行数据的唯一键
      */
     private Map<String, String> rowKeyMap;
 
-    private Map<String, String> columnValueMap;
+    private Map<String, String> propertyValueMap;
 
     /**
      * 事件的时间戳
      */
     private Long occourTime;
 
-    public static RowValue build(List<ColumnValue> columnValues, String database, String tableName) {
+    public static RowValue build(List<PropertyValue> propertyValues, String dataStore) {
 
         RowValue rowValue = new RowValue();
-        rowValue.setTableName(tableName);
-        rowValue.setDatabase(database);
-        Map<String, String> params = Maps.newHashMapWithExpectedSize(columnValues.size());
-        columnValues.forEach(columnValue -> params.put(columnValue.getColumn().toLowerCase(), columnValue.getValue()));
-        rowValue.setColumnValueMap(params);
-        TableInfo tableInfo = TableInfo.getTableInfo(tableName);
-        List<String> uniqueColumn = tableInfo.getUniqueColumn();
+        rowValue.setDataStore(dataStore);
+        Map<String, String> params = Maps.newHashMapWithExpectedSize(propertyValues.size());
+        propertyValues.forEach(propertyValue -> params.put(propertyValue.getProperty().toLowerCase(), propertyValue.getValue()));
+        rowValue.setPropertyValueMap(params);
+        DataStoreInfo dataStoreInfo = DataStoreMappingUtils.getDataStoreInfo(dataStore);
+        List<String> uniqueProperty = dataStoreInfo.getUniqueProperty();
         Map<String, String> rowKeyMap = new TreeMap<>();
-        for (String column : uniqueColumn) {
-            rowKeyMap.put(column, params.get(column));
+        for (String property : uniqueProperty) {
+            rowKeyMap.put(property, params.get(property));
         }
         rowValue.setRowKeyMap(rowKeyMap);
         return rowValue;
     }
 
-    public String getColumnValue(String column) {
-        return Optional.ofNullable(columnValueMap).map(map -> map.get(column)).orElse(null);
+    public String getPropertyValue(String property) {
+        return Optional.ofNullable(propertyValueMap).map(map -> map.get(property)).orElse(null);
     }
 
     @Override
