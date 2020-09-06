@@ -14,14 +14,10 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)
-public class DelayData implements Serializable {
+public class DelayData implements CheckResult, Serializable {
 
     private static final long serialVersionUID = -9038700530704003753L;
 
-    /**
-     * 属性
-     */
-    private String property;
 
     /**
      * 属性值

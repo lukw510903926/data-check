@@ -1,5 +1,6 @@
 package com.mockuai.data.check.service.monitor;
 
+import com.mockuai.data.check.dto.CheckResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,7 @@ public class EmailMonitorStrategy extends AbstractMonitorStrategy {
     }
 
     @Override
-    public void monitor(Object object) {
+    public void monitor(CheckResult checkResult) {
 
     }
 }

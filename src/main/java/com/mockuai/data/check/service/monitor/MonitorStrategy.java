@@ -1,5 +1,7 @@
 package com.mockuai.data.check.service.monitor;
 
+import com.mockuai.data.check.dto.CheckResult;
+
 /**
  * @author : yangqi
  * @email : lukewei@mockuai.com
@@ -11,7 +13,7 @@ public interface MonitorStrategy {
     /**
      * 监控告警
      *
-     * @param object
+     * @param checkResult 比对结果
      */
-    void monitor(Object object);
+    void monitor(CheckResult checkResult);
 }
