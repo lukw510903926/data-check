@@ -1,5 +1,6 @@
 package com.mockuai.data.check.service.monitor;
 
+import com.alibaba.fastjson.JSON;
 import com.mockuai.data.check.dto.CheckResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,6 @@ public class EmailMonitorStrategy extends AbstractMonitorStrategy {
 
     @Override
     public void monitor(CheckResult checkResult) {
-
+        log.info("checkResult {}", JSON.toJSONString(checkResult));
     }
 }
