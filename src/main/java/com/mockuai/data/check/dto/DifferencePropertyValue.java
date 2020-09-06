@@ -14,7 +14,11 @@ public class DifferencePropertyValue {
 
     private Object originalValue;
 
+    private String originalDataStore;
+
     private Object newDataValue;
+
+    private String targetDataStore;
 
     private String property;
 

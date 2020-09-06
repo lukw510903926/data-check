@@ -7,6 +7,7 @@ import com.mockuai.data.check.dto.DataStoreMappingUtils;
 import com.mockuai.data.check.dto.DelayData;
 import com.mockuai.data.check.dto.EventData;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
 
@@ -27,11 +28,15 @@ public abstract class AbstractDelayCheckStrategy extends AbstractDataCheckStrate
     @Override
     public void comparison(EventData eventData) {
         String dataStore = eventData.getDataStore();
-        DataStoreMapping dataStoreMapping = DataStoreMappingUtils.getDataStoreMapping(dataStore);
+        List<DataStoreMapping> mappings = DataStoreMappingUtils.getDataStoreMapping(dataStore);
         log.info("delay data check eventValue {}", eventData);
-        if (dataStoreMapping.getTargetStore().equalsIgnoreCase(eventData.getDataStore())) {
-            List<DelayData> delayData = this.getDelayDataList(eventData);
-            storeDelayData(delayData, eventData);
+        if (CollectionUtils.isNotEmpty(mappings)) {
+            for (DataStoreMapping dataStoreMapping : mappings) {
+                if (dataStoreMapping.getTargetStore().equalsIgnoreCase(eventData.getDataStore())) {
+                    List<DelayData> delayData = this.getDelayDataList(eventData);
+                    storeDelayData(delayData, eventData);
+                }
+            }
         }
     }
 

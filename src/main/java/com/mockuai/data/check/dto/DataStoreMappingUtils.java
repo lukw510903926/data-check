@@ -1,8 +1,10 @@
 package com.mockuai.data.check.dto;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -18,7 +20,7 @@ public class DataStoreMappingUtils {
      * 表间的映射
      * 源数据
      */
-    private static final Map<String, DataStoreMapping> MAPPING_MAP = Maps.newHashMap();
+    private static final Map<String, List<DataStoreMapping>> MAPPING_MAP = Maps.newHashMap();
 
     /**
      * 数据源基本信息
@@ -29,18 +31,6 @@ public class DataStoreMappingUtils {
      * 数据比对配置
      */
     private static final Map<String, DataCheckConfig> DATA_CHECK_CONFIG_MAP = new HashMap<>();
-
-    /**
-     * 获取映射的属性
-     *
-     * @param dataStore
-     * @param property
-     * @return
-     */
-    public static String getMappingProperty(String dataStore, String property) {
-
-        return Optional.ofNullable(MAPPING_MAP.get(dataStore)).map(DataStoreMapping::getPropertyMapping).map(mapping -> mapping.get(property)).orElse(null);
-    }
 
     /**
      * 获取数据源信息
@@ -70,7 +60,7 @@ public class DataStoreMappingUtils {
      * @param dataStore
      * @return
      */
-    public static DataStoreMapping getDataStoreMapping(String dataStore) {
+    public static List<DataStoreMapping> getDataStoreMapping(String dataStore) {
         return MAPPING_MAP.get(dataStore);
     }
 
@@ -80,8 +70,16 @@ public class DataStoreMappingUtils {
      * @param dataStoreMapping
      */
     public static void addDataStoreMapping(DataStoreMapping dataStoreMapping) {
-        MAPPING_MAP.put(dataStoreMapping.getSourceStore(), dataStoreMapping);
-        MAPPING_MAP.put(dataStoreMapping.getTargetStore(), dataStoreMapping);
+        List<DataStoreMapping> mappings = MAPPING_MAP.get(dataStoreMapping.getSourceStore());
+        mappings = Optional.ofNullable(mappings).orElse(Lists.newArrayList());
+        mappings.add(dataStoreMapping);
+        MAPPING_MAP.put(dataStoreMapping.getSourceStore(), mappings);
+
+        List<DataStoreMapping> targetMappings = MAPPING_MAP.get(dataStoreMapping.getSourceStore());
+        targetMappings = Optional.ofNullable(targetMappings).orElse(Lists.newArrayList());
+        targetMappings.add(dataStoreMapping);
+        MAPPING_MAP.put(dataStoreMapping.getSourceStore(), mappings);
+        MAPPING_MAP.put(dataStoreMapping.getTargetStore(), targetMappings);
     }
 
     /**
