@@ -15,7 +15,7 @@ public class EmailMonitorStrategy extends AbstractMonitorStrategy {
 
     @Override
     public String getName() {
-        return null;
+        return MonitorType.EMAIL.name();
     }
 
     @Override

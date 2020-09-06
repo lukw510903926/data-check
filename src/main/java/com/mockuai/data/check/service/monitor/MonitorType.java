@@ -4,14 +4,16 @@ package com.mockuai.data.check.service.monitor;
  * @author : yangqi
  * @email : lukewei@mockuai.com
  * @description :
- * @since : 2020/8/27 23:27
+ * @since : 2020-09-06 22:22
  */
-public interface MonitorStrategy {
+public enum MonitorType {
 
     /**
-     * 监控告警
-     *
-     * @param object
+     * 通知
      */
-    void monitor(Object object);
+    ALERT,
+    /**
+     * 邮件
+     */
+    EMAIL
 }

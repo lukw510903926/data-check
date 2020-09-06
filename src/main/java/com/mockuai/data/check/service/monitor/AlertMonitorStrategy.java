@@ -15,7 +15,7 @@ public class AlertMonitorStrategy extends AbstractMonitorStrategy {
 
     @Override
     public String getName() {
-        return null;
+        return MonitorType.ALERT.name();
     }
 
     @Override

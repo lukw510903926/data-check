@@ -19,6 +19,6 @@ public abstract class AbstractMonitorStrategy implements MonitorStrategy, Initia
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
+        MonitorHolder.addStrategy(getName(), this);
     }
 }
