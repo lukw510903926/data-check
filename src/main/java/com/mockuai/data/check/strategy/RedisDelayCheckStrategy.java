@@ -65,7 +65,7 @@ public class RedisDelayCheckStrategy extends AbstractDelayCheckStrategy {
                     DelayData delayData = new DelayData();
                     delayData.setAttributeValue(afterValue.getPropertyValue(property))
                             .setDelay(delay)
-                            .setProperty(property)
+                            .setTargetProperty(property)
                             .setSourceTime(DateUtils.formatDate(t))
                             .setTargetTime(DateUtils.formatDate(afterValue.getOccourTime()));
                     list.add(delayData);
@@ -81,7 +81,7 @@ public class RedisDelayCheckStrategy extends AbstractDelayCheckStrategy {
         super.storeDelayData(delayDataList, eventData);
         if (CollectionUtils.isNotEmpty(delayDataList)) {
             for (DelayData delayData : delayDataList) {
-                String propertyKey = this.getPropertyKey(delayData.getProperty(), eventData.getAfterValue());
+                String propertyKey = this.getPropertyKey(delayData.getTargetProperty(), eventData.getAfterValue());
                 String diffRedisKey = propertyKey + Constants.SEPARATOR + DELAY_RESULT;
                 this.redisService.set(diffRedisKey, JSON.toJSONString(delayData), Constants.ONE_HOUR);
             }

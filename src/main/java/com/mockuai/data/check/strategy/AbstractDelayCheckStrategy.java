@@ -6,8 +6,11 @@ import com.mockuai.data.check.dto.DataStoreMapping;
 import com.mockuai.data.check.dto.DataStoreMappingUtils;
 import com.mockuai.data.check.dto.DelayData;
 import com.mockuai.data.check.dto.EventData;
+import com.mockuai.data.check.service.monitor.MonitorHolder;
+import com.mockuai.data.check.service.monitor.MonitorType;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -43,7 +46,8 @@ public abstract class AbstractDelayCheckStrategy extends AbstractDataCheckStrate
     public void storeDelayData(List<DelayData> delayDataList, EventData eventData) {
 
         for (DelayData delayData : delayDataList) {
-            log.info("dataStore {} property {} delayData {} ", eventData.getDataStore(), delayData.getProperty(), JSON.toJSONString(delayData));
+            log.info("dataStore {} property {} delayData {} ", eventData.getDataStore(), delayData.getTargetProperty(), JSON.toJSONString(delayData));
+            Arrays.stream(MonitorType.values()).forEach(monitorType -> MonitorHolder.getStrategy(monitorType.name()).monitor(delayData));
         }
     }
 

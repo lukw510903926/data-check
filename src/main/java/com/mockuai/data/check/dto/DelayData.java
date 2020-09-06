@@ -18,6 +18,8 @@ public class DelayData implements CheckResult, Serializable {
 
     private static final long serialVersionUID = -9038700530704003753L;
 
+    private String targetProperty;
+
 
     /**
      * 属性值

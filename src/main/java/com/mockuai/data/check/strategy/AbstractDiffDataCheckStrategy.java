@@ -7,10 +7,13 @@ import com.mockuai.data.check.dto.DataStoreMappingUtils;
 import com.mockuai.data.check.dto.DifferencePropertyValue;
 import com.mockuai.data.check.dto.EventData;
 import com.mockuai.data.check.dto.RowValue;
+import com.mockuai.data.check.service.monitor.MonitorHolder;
+import com.mockuai.data.check.service.monitor.MonitorType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -55,6 +58,7 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
         if (CollectionUtils.isNotEmpty(diffValues)) {
             for (DifferencePropertyValue diffValue : diffValues) {
                 log.info("dataStore {} diffValue {}", eventData.getDataStore(), diffValue);
+                Arrays.stream(MonitorType.values()).forEach(monitorType -> MonitorHolder.getStrategy(monitorType.name()).monitor(diffValue));
             }
         }
     }
