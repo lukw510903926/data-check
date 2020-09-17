@@ -18,21 +18,21 @@ public class DifferencePropertyValue implements CheckResult, Serializable {
     /**
      * 原始值
      */
-    private Object sourceValue;
+    private String sourceValue;
 
     /**
      * 新数据源的值
      */
-    private Object targetDataValue;
+    private String targetDataValue;
 
     private String targetProperty;
 
-    public static DifferencePropertyValue build(Object sourceValue, Object targetDataValue, String targetProperty) {
+    public static DifferencePropertyValue build(String sourceValue, String targetValue, String targetProperty) {
 
         DifferencePropertyValue differencePropertyValue = new DifferencePropertyValue();
         differencePropertyValue.setTargetProperty(targetProperty);
         differencePropertyValue.setSourceValue(sourceValue);
-        differencePropertyValue.setTargetDataValue(targetDataValue);
+        differencePropertyValue.setTargetDataValue(targetValue);
         return differencePropertyValue;
     }
 

@@ -38,7 +38,7 @@ public class RedisDelayCheckStrategy extends AbstractDelayCheckStrategy {
     @Override
     public void comparison(EventData eventData) {
 
-        RowValue afterValue = eventData.getAfterValue();
+        RowValue afterValue = eventData.getRowValue();
         DataStoreInfo dataStoreInfo = DataStoreMappingUtils.getDataStoreInfo(eventData.getDataStore());
         List<String> propertyList = dataStoreInfo.getPropertyList();
         for (String property : propertyList) {
@@ -54,7 +54,7 @@ public class RedisDelayCheckStrategy extends AbstractDelayCheckStrategy {
         List<DelayData> list = Lists.newArrayList();
         DataStoreInfo dataStoreInfo = DataStoreMappingUtils.getDataStoreInfo(targetData.getDataStore());
         List<String> propertyList = dataStoreInfo.getPropertyList();
-        RowValue afterValue = targetData.getAfterValue();
+        RowValue afterValue = targetData.getRowValue();
         for (String property : propertyList) {
             String propertyKey = this.getPropertyKey(property, afterValue);
             Object o = this.redisService.get(propertyKey);
@@ -81,7 +81,7 @@ public class RedisDelayCheckStrategy extends AbstractDelayCheckStrategy {
         super.storeDelayData(delayDataList, eventData);
         if (CollectionUtils.isNotEmpty(delayDataList)) {
             for (DelayData delayData : delayDataList) {
-                String propertyKey = this.getPropertyKey(delayData.getTargetProperty(), eventData.getAfterValue());
+                String propertyKey = this.getPropertyKey(delayData.getTargetProperty(), eventData.getRowValue());
                 String diffRedisKey = propertyKey + Constants.SEPARATOR + DELAY_RESULT;
                 this.redisService.set(diffRedisKey, JSON.toJSONString(delayData), Constants.ONE_HOUR);
             }

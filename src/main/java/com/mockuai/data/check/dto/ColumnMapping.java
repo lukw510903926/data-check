@@ -18,14 +18,14 @@ public class ColumnMapping implements Serializable {
 
     private static final long serialVersionUID = 7022597545751002654L;
 
-    private TableMapping tableMapping;
+    private DataStoreMapping storeMapping;
 
     private Map<String, String> mapping;
 
-    public static ColumnMapping build(TableMapping tableMapping) {
+    public static ColumnMapping build(DataStoreMapping storeMapping) {
 
         ColumnMapping columnMapping = new ColumnMapping();
-        columnMapping.setTableMapping(tableMapping);
+        columnMapping.setStoreMapping(storeMapping);
         return columnMapping;
     }
 

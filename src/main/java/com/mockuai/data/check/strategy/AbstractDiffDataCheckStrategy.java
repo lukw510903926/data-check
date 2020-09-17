@@ -74,8 +74,8 @@ public abstract class AbstractDiffDataCheckStrategy extends AbstractDataCheckStr
 
         List<DifferencePropertyValue> list = Lists.newArrayList();
         String dataStore = targetData.getDataStore();
-        RowValue afterValue = targetData.getAfterValue();
-        RowValue sourceAfterValue = sourceData.getAfterValue();
+        RowValue afterValue = targetData.getRowValue();
+        RowValue sourceAfterValue = sourceData.getRowValue();
         Map<String, String> sourcePropertyValueMap = sourceAfterValue.getPropertyValueMap();
         log.info("afterValue {} sourceAfterValue {}", afterValue, sourceAfterValue);
         Map<String, String> propertyValueMap = afterValue.getPropertyValueMap();

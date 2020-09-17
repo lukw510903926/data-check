@@ -40,7 +40,7 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
     public void comparison(EventData eventData) {
 
         String dataStore = eventData.getDataStore();
-        String key = this.getKey(dataStore, eventData.getAfterValue().getRowKeyMap());
+        String key = this.getKey(dataStore, eventData.getRowValue().getRowKeyMap());
         redisService.set(key, JSON.toJSONString(eventData), Constants.ONE_HOUR);
         super.comparison(eventData);
     }
@@ -48,7 +48,7 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
     @Override
     public void storeDiffValues(List<DifferencePropertyValue> diffValues, EventData eventData) {
         super.storeDiffValues(diffValues, eventData);
-        String diffKey = this.getKey(eventData.getDataStore(), eventData.getAfterValue().getRowKeyMap());
+        String diffKey = this.getKey(eventData.getDataStore(), eventData.getRowValue().getRowKeyMap());
         String diffResultKey = diffKey + Constants.SEPARATOR + DIFF_RESULT;
         if (CollectionUtils.isNotEmpty(diffValues)) {
             this.redisService.set(diffResultKey, JSON.toJSONString(diffValues), Constants.ONE_HOUR);
@@ -58,7 +58,7 @@ public class RedisDiffDataCheckStrategy extends AbstractDiffDataCheckStrategy {
     @Override
     public EventData getRowValue(EventData eventData, String dataStore) {
 
-        String key = this.getKey(dataStore, eventData.getAfterValue().getRowKeyMap());
+        String key = this.getKey(dataStore, eventData.getRowValue().getRowKeyMap());
         Object o = redisService.get(key);
         return Optional.ofNullable(o).map(item -> JSON.parseObject(item.toString(), EventData.class)).orElse(null);
     }

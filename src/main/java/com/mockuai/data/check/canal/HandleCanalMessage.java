@@ -67,7 +67,7 @@ public class HandleCanalMessage {
             eventData.setEventType(dataEventType)
                     .setOccourTime(afterValue.getOccourTime())
                     .setDataStore(dataStore)
-                    .setAfterValue(afterValue);
+                    .setRowValue(afterValue);
             list.add(eventData);
         }
         return list;

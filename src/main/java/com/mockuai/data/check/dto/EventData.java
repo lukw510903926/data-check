@@ -18,14 +18,9 @@ public class EventData implements Serializable {
     private static final long serialVersionUID = -1620021370436333807L;
 
     /**
-     * 变化前的数据
-     */
-    private RowValue beforeValue;
-
-    /**
      * 变化后的数据
      */
-    private RowValue afterValue;
+    private RowValue rowValue;
 
     /**
      * 事件类型
