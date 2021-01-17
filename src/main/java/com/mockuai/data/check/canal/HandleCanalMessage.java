@@ -55,11 +55,11 @@ public class HandleCanalMessage {
 
     public List<EventData> buildEventData(FlatMessage flatMessage, String dataStore) {
 
-        EventData eventData = new EventData();
         DataEventType dataEventType = DataEventType.getEventType(flatMessage.getType());
         List<Map<String, String>> afterColumnsList = flatMessage.getData();
         List<EventData> list = Lists.newArrayListWithExpectedSize(afterColumnsList.size());
         for (Map<String, String> columnMap : afterColumnsList) {
+            EventData eventData = new EventData();
             List<PropertyValue> afterList = Lists.newArrayList();
             columnMap.forEach((key, value) -> afterList.add(PropertyValue.build(key, value)));
             RowValue afterValue = RowValue.build(afterList, dataStore);
